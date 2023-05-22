@@ -3,7 +3,7 @@
 from cassandra.cluster import Cluster
 
 # Connect to Cassandra
-cluster = Cluster(['127.0.0.1'])  # Provide Cassandra cluster IP addresses
+cluster = Cluster(['127.0.0.2'])  # Provide Cassandra cluster IP addresses
 session = cluster.connect()
 
 # Create a keyspace
@@ -14,6 +14,24 @@ replication_options = {
 }
 create_keyspace_query = f"CREATE KEYSPACE {keyspace_name} WITH replication = {replication_options};"
 session.execute(create_keyspace_query)
+
+# Close the Cassandra session and cluster connection
+session.shutdown()
+cluster.shutdown()
+
+
+
+
+# checking keyspace
+
+# Connect to Cassandra
+cluster = Cluster(['127.0.0.2'])  # Provide Cassandra cluster IP addresses
+session = cluster.connect()
+
+# Query keyspaces
+keyspaces = session.execute("SELECT keyspace_name FROM system_schema.keyspaces")
+for keyspace in keyspaces:
+    print(keyspace.keyspace_name)
 
 # Close the Cassandra session and cluster connection
 session.shutdown()
